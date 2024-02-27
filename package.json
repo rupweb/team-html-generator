@@ -1,0 +1,33 @@
+{
+  "name": "team-html-generator",
+  "version": "1.0.0",
+  "description": "A challenge to take user input and produce an html page with tests",
+  "scripts": {
+    "test": "jest --coverage",
+    "cypress:open": "cypress open"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "^node-fetch$": "<rootDir>\\node_modules\\node-fetch\\dist\\index.cjs"
+    },
+    "testEnvironment": "node"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "babel-jest": "^29.7.0"
+  },
+  "type": "module"
+}
