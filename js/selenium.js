@@ -1,12 +1,10 @@
 import { Builder, By } from 'selenium-webdriver';
-import path from 'path';
 
 async function runTest(outputPath, name, email) {
     let driver = await new Builder().forBrowser('chrome').build();
 
     try {
-        const indexPath = path.resolve(__dirname, outputPath); // File under test
-        await driver.get('file://' + indexPath);
+        await driver.get('file://' + outputPath);
 
         // Test for page title
         const title = await driver.getTitle();
