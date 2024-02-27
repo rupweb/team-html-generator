@@ -1,5 +1,5 @@
 // creates the team
-export const generatePage = team => {
+const generateTeam = team => {
 
     // creates the manager html
     const generateManager = manager => {
@@ -80,7 +80,7 @@ export const generatePage = team => {
 }
 
 // exports function to generate entire page
-team => {
+export const completedPage = team => {
 
     return `
     <!DOCTYPE html>

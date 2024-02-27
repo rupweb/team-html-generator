@@ -22,7 +22,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = path.resolve(__dirname, 'output');
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-import { generatePage } from './src/page-template.js';
+import { completedPage } from './src/page-template.js';
 const teamMembers = [];
 
 // function to initialize program
@@ -67,7 +67,7 @@ function promptMenu() {
                 promptIntern();
                 break;
             case 'Finish building the team':
-                const html = generatePage(teamMembers);
+                const html = completedPage(teamMembers);
                 writeToFile(outputPath, html);
                 break;
             default:
