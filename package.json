@@ -28,6 +28,7 @@
   "license": "ISC",
   "dependencies": {
     "babel-jest": "^29.7.0",
+    "chai": "^5.1.0",
     "chromedriver": "^122.0.3",
     "dayjs": "^1.11.10",
     "htmltidy2": "^1.2.0",

@@ -13,7 +13,7 @@ import engineerQuestions from './js/engineer-questions.js';
 import menuQuestions from './js/menu-questions.js';
 
 // Selenium test
-import { runTest } from './js/selenium.js';
+import { runTest } from './js/selenium-chai.js';
 let managerName = '';
 let managerEmail = '';
 
@@ -62,8 +62,6 @@ function promptManager() {
 }
 
 function promptMenu() {
-    console.log("In promptMenu");
-
     inquirer.prompt(menuQuestions).then((answers) => {
         console.log(answers);
         switch (answers.choice) {
@@ -83,37 +81,26 @@ function promptMenu() {
                 break;
         }
     });
-
-    console.log("Out promptMenu");
 }
 
 function promptEngineer() {
-    console.log("In promptEngineer");
-
     inquirer.prompt(engineerQuestions).then((answers) => {
         const engineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
         teamMembers.push(engineer);
         promptMenu();
     });
-
-    console.log("Out promptEngineer");
 }
 
 function promptIntern() {
-    console.log("In promptIntern");
-
     inquirer.prompt(internQuestions).then((answers) => {
         const intern = new Intern(answers.name, answers.id, answers.email, answers.school);
         teamMembers.push(intern);
         promptMenu();
     });
-
-    console.log("Out promptIntern");
 }
 
 // function to write HTML file
 function writeToFile(path, content) {
-    console.log("In writeToFile");
     try {
       fs.writeFileSync(path, content, 'utf8');
       console.log("HTML written.");
@@ -124,7 +111,7 @@ function writeToFile(path, content) {
 
 async function runSeleniumTest() {
     try {
-        console.log("Run selenium test");
+        console.log("Running selenium test");
         await runTest(outputPath, managerName, managerEmail); // Run Selenium test on the new html file
         console.log("Selenium test passed!");
     } catch (error) {

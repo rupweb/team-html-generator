@@ -1,4 +1,5 @@
 import { Builder, By } from 'selenium-webdriver';
+import { expect } from 'chai'; 
 
 async function runTest(outputPath, name, email) {
     let driver = await new Builder().forBrowser('chrome').build();
@@ -8,21 +9,21 @@ async function runTest(outputPath, name, email) {
 
         // Test for page title
         const title = await driver.getTitle();
-        expect(title).toBe('My Team');
+        expect(title).to.equal('My Team'); // Chai syntax
 
         // Test for heading text
         const heading = await driver.findElement(By.className('jumbotron')).getText();
-        expect(heading).toContain('My Team');
+        expect(heading).to.include('My Team'); // Chai syntax
 
         // Test for manager's card information
         const managerName = await driver.findElement(By.css('.card-title')).getText();
-        expect(managerName).toBe(name);
+        expect(managerName).to.equal(name); // Chai syntax
 
         const managerRole = await driver.findElement(By.css('.card-title i')).getAttribute('class');
-        expect(managerRole).toContain('fas fa-mug-hot');
+        expect(managerRole).to.include('fas fa-mug-hot'); // Chai syntax
 
         const managerEmail = await driver.findElement(By.css('.card-body a')).getAttribute('href');
-        expect(managerEmail).toBe(email);
+        expect(managerEmail).to.equal("mailto:" + email); // Chai syntax
     } finally {
         await driver.quit();
     }
