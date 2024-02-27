@@ -10,8 +10,7 @@ const internQuestions = [
                 console.log('Please enter an intern!');
                 return false;
             }
-        },
-        default: 'My Project'
+        }
     },
     {
         type: 'input',

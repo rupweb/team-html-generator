@@ -10,8 +10,7 @@ const engineerQuestions = [
                 console.log('Please enter an engineer!');
                 return false;
             }
-        },
-        default: 'My Project'
+        }
     },
     {
         type: 'input',
