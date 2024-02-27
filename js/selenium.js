@@ -1,12 +1,12 @@
-const { Builder, By, Key, until } = require('selenium-webdriver');
-const path = require('path');
+import { Builder, By, Key, until } from 'selenium-webdriver';
+import path from 'path';
 
-async function runTest() {
+async function runTest(outputPath) {
     console.log("In selenium runTest");
 
     let driver = await new Builder().forBrowser('chrome').build();
     
-    const indexPath = path.resolve(__dirname, '../html/index.html'); // File under test
+    const indexPath = path.resolve(__dirname, outputPath); // File under test
     try {
         await driver.get('file://' + indexPath);
         
@@ -22,4 +22,4 @@ async function runTest() {
     }
 }
 
-module.exports = runTest(); // Export to Jest
+export { runTest }; // Export to Jest

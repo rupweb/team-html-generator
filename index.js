@@ -1,31 +1,46 @@
-import Manager from './lib/Manager.js';
-import Engineer from './lib/Engineer.js';
-import Intern from './lib/Intern.js';
+import { Manager } from './lib/Manager.js';
+import { Engineer } from './lib/Engineer.js';
+import { Intern } from './lib/Intern.js';
 import inquirer from 'inquirer';
 import path from 'path';
 import fs from 'fs';
 
 // Get the questions
-import managerQuestions from "./js/manager-questions.js";
-import questions from "./js/questions.js";
+import managerQuestions from './js/manager-questions.js';
+import internQuestions from './js/intern-questions.js';
+import engineerQuestions from './js/engineer-questions.js';
+import menuQuestions from './js/menu-questions.js';
 
 // Selenium test
-import runTest from "./js/selenium.js";
+import { runTest } from './js/selenium.js';
 
 // Linter
-import tidyOptions from "./js/tidy-options.js";
+import { tidyOptions } from './js/tidy-options.js';
 
-const OUTPUT_DIR = path.resolve(__dirname, "output");
+const OUTPUT_DIR = path.resolve(path.dirname(new URL(import.meta.url).pathname), 'output');
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-const render = require("./src/page-template.js");
-
-
-// TODO: Write Code to gather information about the development team members, and render the HTML file.
+import { render } from './src/page-template.js';
+const teamMembers = [];
 
 // function to initialize program
 function init() {
     console.log("In init");
+    promptManager();
+
+    console.log("Lint HTML");
+    tidy(htmlContent, tidyOptions, (err, html) => {
+        if (err) {
+            console.error('Error tidying HTML:', err);
+        } else {
+            // Write the tidied HTML to a file
+            fs.writeFileSync('tidied.html', html);
+            console.log('HTML tidied and saved to tidied.html');
+        }
+    });
+
+    console.log("Run selenium test");
+    runSeleniumTest();
 }
 
 // function call to initialize program
@@ -43,48 +58,67 @@ function writeToFile(path, content, callback) {
     }
 }
 
-inquirer
-    .prompt(questions)
-    .then((answers) => {
-        console.log(answers);
-        const markdown = generateHtml(answers);
+function promptManager() {
+    inquirer.prompt(managerQuestions).then(answers => {
+        const manager = new Manager(answers.name, answers.id, answers.email, answers.office);
+        teamMembers.push(manager);
+        promptMenu();
+    }); 
+}
 
-        // Synchronous write
-        writeToFile('html/index.html', markdown);
+function promptEngineer() {
+    inquirer.prompt(engineerQuestions).then(answers => {
+        const engineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
+        teamMembers.push(engineer);
+        promptMenu();
+    });
+}
 
-        // Linting
-        tidy();
+function promptIntern() {
+    inquirer.prompt(internQuestions).then(answers => {
+        const intern = new Intern(answers.name, answers.id, answers.email, answers.school);
+        teamMembers.push(intern);
+        promptMenu();
+    });
+}
 
-        // Optional testing
-        if (test) {
-            runSeleniumTest();
-        }
-    })
-    .catch((err) => {
-        if (err.isTtyError) {
-        console.error("Prompt couldn't be rendered in the current environment", err);
-        } else {
-        console.error("Something went wrong", err);
+function promptMenu() {
+    inquirer.prompt(menuQuestions).then(answers => {
+        switch (answers.menu) {
+            case 'Add an Engineer':
+                promptEngineer();
+                break;
+            case 'Add an Intern':
+                promptIntern();
+                break;
+            case 'Finish building the team':
+                render();
+                break;
+            default:
+                break;
         }
     });
+}
 
-    // Tidy the HTML content
-    tidy(htmlContent, tidyOptions, (err, html) => {
-        if (err) {
-            console.error('Error tidying HTML:', err);
-        } else {
-            // Write the tidied HTML to a file
-            fs.writeFileSync('tidied.html', html);
-            console.log('HTML tidied and saved to tidied.html');
-        }
-    });
-
-    async function runSeleniumTest() {
-        try {
-            console.log("Run selenium test");
-            await runTest(); // Run the Selenium test
-            console.log("Selenium test passed!");
-        } catch (error) {
-            console.error("Selenium test failed:", error);
-        }
+// Tidy the HTML content
+tidy(htmlContent, tidyOptions, (err, html) => {
+    if (err) {
+        console.error('Error tidying HTML:', err);
+    } else {
+        // Write the tidied HTML to a file
+        fs.writeFileSync('tidied.html', html);
+        console.log('HTML tidied and saved to tidied.html');
     }
+});
+
+async function runSeleniumTest() {
+    try {
+        console.log("Run selenium test");
+        await runTest(); // Run the Selenium test
+        console.log("Selenium test passed!");
+    } catch (error) {
+        console.error("Selenium test failed:", error);
+    }
+}
+
+module.exports = outputPath;
