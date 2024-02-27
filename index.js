@@ -14,6 +14,8 @@ import menuQuestions from './js/menu-questions.js';
 
 // Selenium test
 import { runTest } from './js/selenium.js';
+let managerName = '';
+let managerEmail = '';
 
 // Linter
 import { tidyOptions } from './js/tidy-options.js';
@@ -22,7 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = path.resolve(__dirname, 'output');
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-import { completedPage } from './src/page-template.js';
+import { completedPage }from './src/page-template.js';
 const teamMembers = [];
 
 // function to initialize program
@@ -41,6 +43,11 @@ function promptManager() {
         .prompt(managerQuestions)
         .then((answers) => {
             console.log(answers);
+
+            // For selenium test
+            managerName = answers.name;
+            managerEmail = answers.email;
+
             const manager = new Manager(answers.name, answers.id, answers.email, answers.office);
             teamMembers.push(manager);
             promptMenu();
@@ -69,6 +76,7 @@ function promptMenu() {
             case 'Finish building the team':
                 const html = completedPage(teamMembers);
                 writeToFile(outputPath, html);
+                runSeleniumTest();
                 break;
             default:
                 console.log("No option chosen");
@@ -112,14 +120,12 @@ function writeToFile(path, content) {
     } catch (err) {
       console.error("An error occurred:", err);
     }
-
-    // runSeleniumTest();
 }
 
 async function runSeleniumTest() {
     try {
         console.log("Run selenium test");
-        await runTest(outputPath); // Run Selenium test on the new html file
+        await runTest(outputPath, managerName, managerEmail); // Run Selenium test on the new html file
         console.log("Selenium test passed!");
     } catch (error) {
         console.error("Selenium test failed:", error);
