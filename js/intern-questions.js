@@ -37,8 +37,7 @@ const internQuestions = [
                 console.log('Please enter a intern email!');
                 return false;
             }
-        },
-        default: 'My Project'
+        }
     },
     {
         type: 'input',

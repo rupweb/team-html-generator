@@ -10,8 +10,7 @@ const managerQuestions = [
                 console.log('Please enter a manager!');
                 return false;
             }
-        },
-        default: 'My Project'
+        }
     },
     {
         type: 'input',
@@ -37,8 +36,7 @@ const managerQuestions = [
                 console.log('Please enter a manager email!');
                 return false;
             }
-        },
-        default: 'My Project'
+        }
     },
     {
         type: 'input',

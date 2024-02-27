@@ -1,4 +1,4 @@
-import { Builder, By, Key, until } from 'selenium-webdriver';
+import { Builder, By } from 'selenium-webdriver';
 import path from 'path';
 
 async function runTest(outputPath) {
